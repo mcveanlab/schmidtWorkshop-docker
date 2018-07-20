@@ -46,14 +46,13 @@ RUN jupyter contrib nbextension install --user
 RUN jupyter nbextension enable init_cell/main
 RUN jupyter nbextension enable hide_input/main
 
-# RUN R -e "setwd('../'); devtools::build('.', path='.')"
-
-# RUN R -e "devtools::install_github('mcveanlab/schmidtWorkshop')"
-
 USER root
-COPY schmidtWorkshop /tmp/
-COPY *.ipynb /home/jovyan/
+RUN mkdir /tmp/schmidtWorkshop
+COPY schmidtWorkshop /tmp/schmidtWorkshop
+RUN R -e "devtools::install_local('/tmp/schmidtWorkshop', dependencies=F)"
+
+COPY schmidtWorkshop/notebooks/*.ipynb /home/jovyan/
 RUN fix-permissions /home/jovyan
+
 # Remove redundant dir added by parent images.
 RUN rmdir work
-
