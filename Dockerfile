@@ -24,7 +24,6 @@ RUN  apt-get update && \
     r-cran-png \
     # Needed for the workshop
     r-cran-data.table \
-    r-cran-plotly \
     r-cran-magrittr
 
 # Install remaining packages not available in ubuntu.
@@ -33,6 +32,7 @@ RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite(c('Rgraphviz',
 # IRkernel is needed for Jupyter notebook.
 RUN R -e "devtools::install_github('IRkernel/IRkernel')"
 RUN R -e "IRkernel::installspec()"
+RUN R -e "install.packages(c('htmlwidgets', 'shiny', 'plotly'))"
 
 RUN fix-permissions /home/jovyan/.local
 
