@@ -1,8 +1,8 @@
 # schmidtWorkshop-docker
 Builds a docker image out of the schmidtWorkshop repo
 
-- Clone the [main repo](https://github.com/mcveanlab/schmidtWorkshop) so that it's
-  in the same directory as the Dockerfile.
+- Clone the repo, ensuring that the [R package repo](https://github.com/mcveanlab/schmidtWorkshop)
+  is included as a submodule: ``git clone --recursive https://github.com/mcveanlab/schmidtWorkshop-docker.git``
 
 - Build the docker image: ``sudo docker build -t bdi-rsf-workshop . --network host``.
   (The --network host is probably not needed in most cases, but it worked around 
