@@ -9,6 +9,7 @@ RUN  apt-get update && \
     fonts-dejavu \
     tzdata \
     gfortran \
+    git \
     gcc \
     libzmq3-dev \
     graphviz-dev \
@@ -47,9 +48,8 @@ RUN mkdir /tmp/schmidtWorkshop
 COPY schmidtWorkshop /tmp/schmidtWorkshop
 RUN R -e "devtools::install_local('/tmp/schmidtWorkshop', dependencies=F)"
 
-# Copying these files here don't show up in the final image on JupyterHub
-# because it mounts another file system over /home. It's useful to have 
-# them here for testing though.
-COPY schmidtWorkshop/notebooks/*.ipynb /home/jovyan/
+COPY 01_install.sh  /usr/local/bin/start-notebook.d/
+RUN chmod a+x /usr/local/bin/start-notebook.d/01_install.sh
 RUN fix-permissions /home/jovyan
 
+USER $NB_UID
