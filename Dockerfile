@@ -28,31 +28,28 @@ RUN  apt-get update && \
 
 # Install remaining packages not available in ubuntu.
 RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite(c('Rgraphviz', 'graph', 'BiocGenerics'))"
+RUN R -e "install.packages(c('htmlwidgets', 'shiny', 'plotly'))"
 
 # IRkernel is needed for Jupyter notebook.
 RUN R -e "devtools::install_github('IRkernel/IRkernel')"
-RUN R -e "IRkernel::installspec()"
-RUN R -e "install.packages(c('htmlwidgets', 'shiny', 'plotly'))"
+RUN R -e "IRkernel::installspec(user=FALSE)"
 
-RUN fix-permissions /home/jovyan/.local
-
-USER $NB_UID
 # Jupyter extensions
 RUN conda install --quiet --yes \
     'jupyter_contrib_nbextensions' && \
     conda clean -tipsy 
 RUN fix-permissions $CONDA_DIR
-RUN jupyter contrib nbextension install --user
-RUN jupyter nbextension enable init_cell/main
-RUN jupyter nbextension enable hide_input/main
+RUN jupyter contrib nbextension install --system
+RUN jupyter nbextension enable init_cell/main --system
+RUN jupyter nbextension enable hide_input/main --system
 
-USER root
 RUN mkdir /tmp/schmidtWorkshop
 COPY schmidtWorkshop /tmp/schmidtWorkshop
 RUN R -e "devtools::install_local('/tmp/schmidtWorkshop', dependencies=F)"
 
+# Copying these files here don't show up in the final image on JupyterHub
+# because it mounts another file system over /home. It's useful to have 
+# them here for testing though.
 COPY schmidtWorkshop/notebooks/*.ipynb /home/jovyan/
 RUN fix-permissions /home/jovyan
 
-# Remove redundant dir added by parent images.
-RUN rmdir work
