@@ -46,8 +46,8 @@ RUN jupyter nbextension enable init_cell/main --system
 RUN jupyter nbextension enable hide_input/main --system
 RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
-RUN mkdir /tmp/schmidtWorkshop
-COPY schmidtWorkshop /tmp/schmidtWorkshop
-RUN R -e "devtools::install_local('/tmp/schmidtWorkshop', dependencies=F)"
+# Uncomment this to test locally.
+# COPY schmidtWorkshop /home/jovyan
 
+RUN fix-permissions /home/jovyan
 USER $NB_UID
