@@ -36,6 +36,7 @@ RUN R -e "devtools::install_github('IRkernel/IRkernel')"
 RUN R -e "IRkernel::installspec(user=FALSE)"
 
 # Jupyter extensions
+RUN pip install nbgitpuller
 RUN conda install --quiet --yes \
     'jupyter_contrib_nbextensions' && \
     conda clean -tipsy 
@@ -43,6 +44,7 @@ RUN fix-permissions $CONDA_DIR
 RUN jupyter contrib nbextension install --system
 RUN jupyter nbextension enable init_cell/main --system
 RUN jupyter nbextension enable hide_input/main --system
+RUN jupyter serverextension enable --py nbgitpuller --sys-prefix
 
 RUN mkdir /tmp/schmidtWorkshop
 COPY schmidtWorkshop /tmp/schmidtWorkshop
