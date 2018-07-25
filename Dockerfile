@@ -50,8 +50,4 @@ RUN mkdir /tmp/schmidtWorkshop
 COPY schmidtWorkshop /tmp/schmidtWorkshop
 RUN R -e "devtools::install_local('/tmp/schmidtWorkshop', dependencies=F)"
 
-COPY 01_install.sh  /usr/local/bin/start-notebook.d/
-RUN chmod a+x /usr/local/bin/start-notebook.d/01_install.sh
-RUN fix-permissions /home/jovyan
-
 USER $NB_UID
